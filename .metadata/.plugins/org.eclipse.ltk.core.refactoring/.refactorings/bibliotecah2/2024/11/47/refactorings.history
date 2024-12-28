@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename package &apos;com.jose.bibliotecah2.menuUtils&apos; to &apos;com.jose.bibliotecah2.utilidades&apos;&#x0D;&#x0A;- Original project: &apos;bibliotecah2&apos;&#x0D;&#x0A;- Original element: &apos;bibliotecah2/src/main/java/com.jose.bibliotecah2.menuUtils&apos;&#x0D;&#x0A;- Renamed element: &apos;bibliotecah2/src/main/java/com.jose.bibliotecah2.utilidades&apos;&#x0D;&#x0A;- Update references to refactored element&#x0D;&#x0A;- Update textual occurrences in comments and strings" description="Rename package &apos;com.jose.bibliotecah2.menuUtils&apos;" flags="589830" hierarchical="false" id="org.eclipse.jdt.ui.rename.package" input="/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.jose.bibliotecah2.menuUtils" name="com.jose.bibliotecah2.utilidades" qualified="false" references="true" stamp="1732113318416" textual="false" version="1.0"/>
+</session>

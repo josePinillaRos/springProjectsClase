@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="org.hibernate.SessionFactory"/>
+    <fullyQualifiedTypeName name="com.sun.org.slf4j.internal.Logger"/>
+    <fullyQualifiedTypeName name="java.util.logging.Level"/>
+    <fullyQualifiedTypeName name="org.hibernate.Transaction"/>
+    <fullyQualifiedTypeName name="java.util.Scanner"/>
+    <fullyQualifiedTypeName name="com.jose.bibliotecah2.utilidades.HibernateUtils"/>
+    <fullyQualifiedTypeName name="org.hibernate.cfg.Configuration"/>
+    <fullyQualifiedTypeName name="jakarta.persistence.Query"/>
+    <fullyQualifiedTypeName name="java.util.List"/>
+    <fullyQualifiedTypeName name="com.jose.practica04.entidades.Types"/>
+    <fullyQualifiedTypeName name="java.util.Set"/>
+    <fullyQualifiedTypeName name="jakarta.persistence.NamedQueries"/>
+    <fullyQualifiedTypeName name="jakarta.persistence.NamedQuery"/>
+    <fullyQualifiedTypeName name="com.jose.practica04.utilidades.HibernateUtils"/>
+</qualifiedTypeNameHistroy>
