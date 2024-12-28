@@ -564,7 +564,7 @@ public class App {
 		String nativeQuery = 
 			"SELECT j.* " +
 	        "FROM jokes j " +
-	        "WHERE j.category_id = :id";
+	        "WHERE j.category_id = :catId";
 		
 	    // 1. Escoger la categoría a eliminar
 	    Categories catABorrar = escogerElemento(categorias, Categories.class);
@@ -834,7 +834,7 @@ public class App {
 		String nativeQuery =
 			"SELECT j.* " +
 			"FROM jokes j " +
-			"WHERE j.language_id = :id";
+			"WHERE j.language_id = :langId";
 		
 	    Language langABorrar = escogerElemento(lenguajes, Language.class);
 	    if (langABorrar == null) {
@@ -850,6 +850,25 @@ public class App {
 	    }
 
 	    borrarLanguageFinal(langABorrar);
+	}
+
+	/**
+	 * Obtiene la lista de Jokes asociados al Language proporcionado, mediante Native Query.
+	 * Se asume que la tabla jokes tiene la columna language_id de tipo ManyToOne con Language.
+	 * @param langABorrar El Language del que se desea obtener los Jokes asociados.
+	 * @return Lista de Jokes asociados al Language
+	 */
+	private static List<Jokes> getJokesAsociadosALanguage(Language langABorrar) {
+	    HashMap<String, Object> params = new HashMap<>();
+	    params.put("langId", langABorrar.getId());
+
+	    return HibernateUtils.nativeQuery(
+	        "SELECT j.* " +
+	        "FROM jokes j " +
+	        "WHERE j.language_id = :langId",
+	        Jokes.class,
+	        params
+	    );
 	}
 
 	/**
@@ -990,19 +1009,9 @@ public class App {
 			}
 		}	
 	}
-	
+
 	private static void buscarTodosFlags() {
-		List<Flags> flags = obtenerTodosFlags();
-		if (flags.isEmpty()) {
-			System.out.println("No hay flags disponibles.");
-			return;
-		} else {
-			flags.forEach(System.out::println);
-		}
-	}
-	
-	private static List<Flags> obtenerTodosFlags() {
-		return HibernateUtils.getAll(Flags.class);
+		HibernateUtils.getAll(Flags.class).forEach(System.out::println);
 	}
 
 	private static void buscarFlagPorTexto() {
@@ -1068,7 +1077,7 @@ public class App {
 	}
 
 	private static void modificarFlag() {
-		buscarTodosFlags();
+		HibernateUtils.getAll(Flags.class).forEach(System.out::println);
 
 		Flags flagAModificar = null;
 
@@ -1103,7 +1112,7 @@ public class App {
 	}
 
 	private static void borrarFlag() {
-		List<Flags> flags = obtenerTodosFlags();
+		List<Flags> flags = HibernateUtils.getAll(Flags.class);
 		String nativeQuery = 
 			"SELECT j.* " +
 	        "FROM jokes j " +
@@ -1116,14 +1125,21 @@ public class App {
 	    }
 	
 	    List<Jokes> jokesAsociados = getJokesAsociadosAlElemento(flagABorrar.getId(), nativeQuery);
-
+	
+	    // Si hay jokes asociados, dar opciones (desvincular / borrar jokes).
+	    //    Si no hay jokes, simplemente se hace el borrado al final.
 	    if (!jokesAsociados.isEmpty()) {
 	        gestionarJokesAsociados(flagABorrar, jokesAsociados);
 	        return; 
 	    }
 	
-	    borrarElementoFinal(flagABorrar, flagABorrar.getId(), "flag");
+	    // Si no había jokes asociados borramos el flag aquí
+	    borrarFlagFinal(flagABorrar);
 	}
+	
+
+
+
 	
 	/**
 	 * Muestra un menú para el usuario, permitiéndole:
@@ -1149,11 +1165,12 @@ public class App {
 
 	        switch (opcion) {
 	            case "1":
+	                // Desvincular el flag de cada Joke
 	                for (Jokes joke : jokesAsociados) {
-	                    Jokes jokeDesvinculado = HibernateUtils.getId(Jokes.class, joke.getId());
-	                    if (jokeDesvinculado != null) {
-	                        jokeDesvinculado.getFlagses().remove(flagABorrar);
-	                        HibernateUtils.merge(jokeDesvinculado);
+	                    Jokes jokeManaged = HibernateUtils.getId(Jokes.class, joke.getId());
+	                    if (jokeManaged != null) {
+	                        jokeManaged.getFlagses().remove(flagABorrar);
+	                        HibernateUtils.merge(jokeManaged);
 	                    }
 	                }
 	                System.out.println("Se ha desvinculado el flag de " + jokesAsociados.size() + " chistes.");
@@ -1164,7 +1181,7 @@ public class App {
 	                    return;
 	                }
 
-	                borrarElementoFinal(flagABorrar, flagABorrar.getId(), "flag");
+	                borrarFlagFinal(flagABorrar);
 	                return;
 
 	            case "2":
@@ -1192,7 +1209,7 @@ public class App {
 	                    return;
 	                }
 	                
-	                borrarElementoFinal(flagABorrar, flagABorrar.getId(), "flag");
+	                borrarFlagFinal(flagABorrar);
 	                return;
 
 	            default:
@@ -1201,27 +1218,24 @@ public class App {
 	        }
 	    }
 	}
-	
-	//=================Métodos auxiliares=================
-	
+
 	/**
 	 * Borra finalmente el flag (ya sea tras desvincular o si no había jokes).
-	 * @param <T>
 	 */
-	private static <T> void borrarElementoFinal(T elementoABorrar, long idElemento, String nombreElemento) {
+	private static void borrarFlagFinal(Flags flagABorrar) {
 		 boolean confirmado = leerConfirmacionSN(
-		            "Va a borrar " + nombreElemento + " con ID: " + idElemento + ". ¿Está seguro? (S/N): "
+		            "Va a borrar el flag con ID: " + flagABorrar.getId() + ". ¿Está seguro? (S/N): "
 		    );
 		    if (!confirmado) {
-		        System.out.println("Operación cancelada. No se ha borrado el " + nombreElemento);
+		        System.out.println("Operación cancelada. No se ha borrado el flag.");
 		        return;
 		    }
 
-		    boolean resultado = HibernateUtils.remove(elementoABorrar);
+		    boolean resultado = HibernateUtils.remove(flagABorrar);
 		    if (resultado) {
-		        System.out.println(nombreElemento + " borrado correctamente (ID: " + idElemento + ").");
+		        System.out.println("Flag borrado correctamente (ID: " + flagABorrar.getId() + ").");
 		    } else {
-		        System.out.println("Ha ocurrido un error al intentar borrar el " + nombreElemento);
+		        System.out.println("Ha ocurrido un error al intentar borrar el flag.");
 		    }
 	}
 	

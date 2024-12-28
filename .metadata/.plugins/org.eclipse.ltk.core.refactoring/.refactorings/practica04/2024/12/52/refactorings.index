@@ -1,3 +1,5 @@
 1735205648754	Rename local variable 'entradaUsuario'
 1735323299836	Rename local variable 'nombre'
 1735396554348	Rename method 'getFlagToDelete'
+1735411690513	Rename local variable 'jokeManaged'
+1735411711525	Rename local variable 'jokeCambiado'

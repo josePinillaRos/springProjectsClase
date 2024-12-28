@@ -834,7 +834,7 @@ public class App {
 		String nativeQuery =
 			"SELECT j.* " +
 			"FROM jokes j " +
-			"WHERE j.language_id = :id";
+			"WHERE j.language_id = :langId";
 		
 	    Language langABorrar = escogerElemento(lenguajes, Language.class);
 	    if (langABorrar == null) {
