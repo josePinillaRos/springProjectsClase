@@ -1837,3 +1837,38 @@ Caused by: org.codehaus.plexus.util.xml.pull.XmlPullParserException: expected > 
 2024-12-28 20:20:58,916 [Worker-85: Launching App (4)] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\STS\springProjects\practica04\src\test\resources
 2024-12-28 20:22:37,642 [Worker-89: Launching App (4)] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\STS\springProjects\practica04\src\main\resources
 2024-12-28 20:22:37,648 [Worker-89: Launching App (4)] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\STS\springProjects\practica04\src\test\resources
+2024-12-29 15:55:17,628 [Worker-7: Loading available Gradle versions] INFO  o.e.b.c.i.u.g.PublishedGradleVersions - Gradle version information cache is out-of-date. Trying to update.
+2024-12-29 15:58:44,057 [Worker-12: Launching App (4)] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\STS\springProjects\practica04\src\main\resources
+2024-12-29 15:58:44,067 [Worker-12: Launching App (4)] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\STS\springProjects\practica04\src\test\resources
+2024-12-29 16:00:07,722 [Worker-20: Launching App (4)] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\STS\springProjects\practica04\src\main\resources
+2024-12-29 16:00:07,724 [Worker-20: Launching App (4)] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\STS\springProjects\practica04\src\test\resources
+2024-12-29 16:01:56,674 [Worker-7: Launching App (4)] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\STS\springProjects\practica04\src\main\resources
+2024-12-29 16:01:56,693 [Worker-7: Launching App (4)] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\STS\springProjects\practica04\src\test\resources
+2024-12-29 16:03:53,483 [Worker-25: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\STS\springProjects\practica04\src\main\resources
+2024-12-29 16:03:53,486 [Worker-25: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\STS\springProjects\practica04\src\test\resources
+2024-12-29 16:14:48,274 [Worker-16: Launching App (4)] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\STS\springProjects\practica04\src\main\resources
+2024-12-29 16:14:48,277 [Worker-16: Launching App (4)] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\STS\springProjects\practica04\src\test\resources
+2024-12-29 16:15:51,190 [Worker-26: Launching App (4)] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\STS\springProjects\practica04\src\main\resources
+2024-12-29 16:15:51,193 [Worker-26: Launching App (4)] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\STS\springProjects\practica04\src\test\resources
+2024-12-29 16:18:46,973 [Worker-29: Launching App (4)] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\STS\springProjects\practica04\src\main\resources
+2024-12-29 16:18:46,977 [Worker-29: Launching App (4)] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\STS\springProjects\practica04\src\test\resources
+2024-12-29 16:19:02,942 [Worker-30: Launching App (4)] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\STS\springProjects\practica04\src\main\resources
+2024-12-29 16:19:02,946 [Worker-30: Launching App (4)] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\STS\springProjects\practica04\src\test\resources
+2024-12-29 16:25:15,230 [Worker-30: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\STS\springProjects\practica04\src\main\resources
+2024-12-29 16:25:15,232 [Worker-30: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\STS\springProjects\practica04\src\test\resources
+2024-12-29 16:34:05,647 [Worker-35: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\STS\springProjects\practica04\src\main\resources
+2024-12-29 16:34:05,648 [Worker-35: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\STS\springProjects\practica04\src\test\resources
+2024-12-29 16:37:28,599 [Worker-35: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\STS\springProjects\practica04\src\main\resources
+2024-12-29 16:37:28,600 [Worker-35: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\STS\springProjects\practica04\src\test\resources
+2024-12-29 16:53:41,068 [Worker-42: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\STS\springProjects\practica04\src\main\resources
+2024-12-29 16:53:41,070 [Worker-42: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\STS\springProjects\practica04\src\test\resources
+2024-12-29 16:54:30,706 [Worker-39: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\STS\springProjects\practica04\src\main\resources
+2024-12-29 16:54:30,707 [Worker-39: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\STS\springProjects\practica04\src\test\resources
+2024-12-29 17:43:31,671 [Worker-62: Launching App (4)] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\STS\springProjects\practica04\src\main\resources
+2024-12-29 17:43:31,674 [Worker-62: Launching App (4)] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\STS\springProjects\practica04\src\test\resources
+2024-12-29 17:53:23,563 [Worker-62: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\STS\springProjects\practica04\src\main\resources
+2024-12-29 17:53:23,565 [Worker-62: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\STS\springProjects\practica04\src\test\resources
+2024-12-29 17:55:08,473 [Worker-65: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\STS\springProjects\practica04\src\main\resources
+2024-12-29 17:55:08,474 [Worker-65: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\STS\springProjects\practica04\src\test\resources
+2024-12-29 18:02:15,848 [Worker-52: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\STS\springProjects\practica04\src\main\resources
+2024-12-29 18:02:15,849 [Worker-52: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\STS\springProjects\practica04\src\test\resources

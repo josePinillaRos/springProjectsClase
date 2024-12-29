@@ -3,3 +3,5 @@
 1735396554348	Rename method 'getFlagToDelete'
 1735411690513	Rename local variable 'jokeManaged'
 1735411711525	Rename local variable 'jokeCambiado'
+1735484632745	Rename method 'buscarTodosFlags'
+1735491203106	Rename method 'introducirFlags'

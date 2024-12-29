@@ -388,22 +388,6 @@ public class App {
         if (leerConfirmacionSN("¿Desea modificar el tipo? (S/N): ")) {
 			Types typeElegido = elegirType();
 			jokeAModificar.setTypes(typeElegido);
-			
-			System.out.println("Texto actual: " + jokeAModificar.getText1() + " - " + jokeAModificar.getText2());
-			String[] partes = elegriTexto(jokeAModificar.getTypes());
-			String texto1 = partes[0];
-			String texto2 = partes[1];
-			jokeAModificar.setText1(texto1);
-			jokeAModificar.setText2(texto2);
-        } else {
-        	System.out.println("Texto actual: " + jokeAModificar.getText1() + " - " + jokeAModificar.getText2());
-    		if (leerConfirmacionSN("¿Desea modificar el texto? (S/N): ")) {
-    			String[] partes = elegriTexto(jokeAModificar.getTypes());
-    			String texto1 = partes[0];
-    			String texto2 = partes[1];
-    			jokeAModificar.setText1(texto1);
-    			jokeAModificar.setText2(texto2);
-    		}
         }
 	    
         System.out.println("Lenguaje actual: " + jokeAModificar.getLanguage());
@@ -411,7 +395,16 @@ public class App {
             Language languajeElegido = elegirLenguaje();
             jokeAModificar.setLanguage(languajeElegido);
         }
- 
+
+        System.out.println("Texto actual: " + jokeAModificar.getText1() + " - " + jokeAModificar.getText2());
+		if (leerConfirmacionSN("¿Desea modificar el texto? (S/N): ")) {
+			String[] partes = elegriTexto(jokeAModificar.getTypes());
+			String texto1 = partes[0];
+			String texto2 = partes[1];
+			jokeAModificar.setText1(texto1);
+			jokeAModificar.setText2(texto2);
+		}
+        
 		System.out.println("Flags actuales: " + jokeAModificar.getFlagses());
 		
 		if (leerConfirmacionSN("¿Desea modificar los flags? (S/N): ")) {
@@ -429,6 +422,9 @@ public class App {
 		            default -> System.out.println("Opción no válida");
 		        }
 		    }
+			/*
+			Set<Flags> flags = elegirFlags();
+			jokeAModificar.setFlagses(flags);*/
 		}
 		
 		return jokeAModificar;

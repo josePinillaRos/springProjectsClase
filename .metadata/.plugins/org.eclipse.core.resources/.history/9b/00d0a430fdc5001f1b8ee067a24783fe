@@ -303,47 +303,6 @@ public class App {
 	    return flagsSeleccionados;
 	}
 	
-	private static Set<Flags> elegirFlags(Set<Flags> flagsDisponibles) {
-		System.out.println("Flags disponibles:");
-
-	    flagsDisponibles.forEach(System.out::println);
-
-	    Set<Flags> flagsSeleccionados = new HashSet<>();
-	    boolean continuar = true;
-
-	    while (continuar) {
-	        System.out.print("Seleccione un flag por su id (o escriba '0' para finalizar): ");
-	        String eleccionUsuario = sc.nextLine();
-
-	        try {
-	            int idSeleccionado = Integer.parseInt(eleccionUsuario);
-
-	            if (idSeleccionado == 0) {
-	                continuar = false; 
-	            } else {
-	                // Buscar el flag por su id
-	                Flags flagSeleccionado = HibernateUtils.getId(Flags.class, idSeleccionado);
-
-	                if (flagSeleccionado != null) {
-	                    if (!flagsSeleccionados.contains(flagSeleccionado)) {
-	                        flagsSeleccionados.add(flagSeleccionado);
-	                        System.out.println("Flag seleccionado: " + flagSeleccionado);
-	                    } else {
-	                        System.out.println("El flag ya ha sido seleccionado.");
-	                    }
-	                } else {
-	                    System.out.println("Flag no existe. Introduzca un id válido.");
-	                }
-	            }
-	        } catch (NumberFormatException e) {
-	            System.out.println("Entrada no válida. Por favor, introduzca un número.");
-	        }
-	    }
-
-	    System.out.println("Flags seleccionados: " + flagsSeleccionados);
-	    return flagsSeleccionados;
-	}
-
 	private static void modificarJoke() {
 	    HibernateUtils.getAll(Jokes.class).forEach(System.out::println); 
 
@@ -388,22 +347,6 @@ public class App {
         if (leerConfirmacionSN("¿Desea modificar el tipo? (S/N): ")) {
 			Types typeElegido = elegirType();
 			jokeAModificar.setTypes(typeElegido);
-			
-			System.out.println("Texto actual: " + jokeAModificar.getText1() + " - " + jokeAModificar.getText2());
-			String[] partes = elegriTexto(jokeAModificar.getTypes());
-			String texto1 = partes[0];
-			String texto2 = partes[1];
-			jokeAModificar.setText1(texto1);
-			jokeAModificar.setText2(texto2);
-        } else {
-        	System.out.println("Texto actual: " + jokeAModificar.getText1() + " - " + jokeAModificar.getText2());
-    		if (leerConfirmacionSN("¿Desea modificar el texto? (S/N): ")) {
-    			String[] partes = elegriTexto(jokeAModificar.getTypes());
-    			String texto1 = partes[0];
-    			String texto2 = partes[1];
-    			jokeAModificar.setText1(texto1);
-    			jokeAModificar.setText2(texto2);
-    		}
         }
 	    
         System.out.println("Lenguaje actual: " + jokeAModificar.getLanguage());
@@ -411,44 +354,22 @@ public class App {
             Language languajeElegido = elegirLenguaje();
             jokeAModificar.setLanguage(languajeElegido);
         }
- 
-		System.out.println("Flags actuales: " + jokeAModificar.getFlagses());
-		
-		if (leerConfirmacionSN("¿Desea modificar los flags? (S/N): ")) {
-			
-			while (true) {
-		    	System.out.println("\nMenú de gestión de modificación de flags");
-		    	System.out.println("-----------------------------------------------------------------------------\n");
-		        System.out.println(MenuUtils.imprimirMenu("Añadir flags", "Eliminar flags"));
-		        String subOpcion = sc.nextLine();
-		        if (subOpcion.equals("0"))
-		            break;
-		        switch (subOpcion) {
-		            case "1" -> jokeAModificar = introducirFlagsJokesModificados(jokeAModificar);
-		            case "2" -> jokeAModificar = quitarFlags(jokeAModificar);
-		            default -> System.out.println("Opción no válida");
-		        }
-		    }
-		}
-		
-		return jokeAModificar;
-	}
-	
-	private static Jokes introducirFlagsJokesModificados(Jokes jokeAModificar) {
-		Set<Flags> flags = elegirFlags();
-		jokeAModificar.setFlagses(flags);
-		return jokeAModificar;
-	}
-		
-	private static Jokes quitarFlags(Jokes jokeAModificar) {
-		Set<Flags> flagsActuales = jokeAModificar.getFlagses();
 
-		if (flagsActuales.isEmpty()) {
-			System.out.println("El joke no tiene flags asociados.");
-			return jokeAModificar;
+        System.out.println("Texto actual: " + jokeAModificar.getText1() + " - " + jokeAModificar.getText2());
+		if (leerConfirmacionSN("¿Desea modificar el texto? (S/N): ")) {
+			String[] partes = elegriTexto(jokeAModificar.getTypes());
+			String texto1 = partes[0];
+			String texto2 = partes[1];
+			jokeAModificar.setText1(texto1);
+			jokeAModificar.setText2(texto2);
 		}
-		Set<Flags> flagsAQuitar = elegirFlags(flagsActuales);
-		jokeAModificar.getFlagses().removeAll(flagsAQuitar);
+        
+		System.out.println("Flags actuales: " + jokeAModificar.getFlagses());
+		if (leerConfirmacionSN("¿Desea modificar los flags? (S/N): ")) {
+			Set<Flags> flags = elegirFlags();
+			jokeAModificar.setFlagses(flags);
+		}
+		
 		return jokeAModificar;
 	}
 	
@@ -507,20 +428,20 @@ public class App {
 	// ===========================Métodos de gestión de categories==================================
 	private static void tratarOpcionGestionCategories() {
 		 while (true) {
-	    	System.out.println("\nMenú de gestión de categories");
-	    	System.out.println("-----------------------------------------------------------------------------\n");
-	        System.out.println(MenuUtils.imprimirMenu("Consultas", "Insertar categoria", "Modificar categoria", "Borrar categoría"));
-	        String subOpcion = sc.nextLine();
-	        if (subOpcion.equals("0"))
-	            break;
-	        switch (subOpcion) {
-	            case "1" -> consultasCategorias();
-	            case "2" -> insertarCategoria();
-	            case "3" -> modificarCategoria();
-	            case "4" -> borrarCategoria();
-	            default -> System.out.println("Opción no válida");
-	        }
-	    }
+		    	System.out.println("\nMenú de gestión de categories");
+		    	System.out.println("-----------------------------------------------------------------------------\n");
+		        System.out.println(MenuUtils.imprimirMenu("Consultas", "Insertar categoria", "Modificar categoria", "Borrar categoría"));
+		        String subOpcion = sc.nextLine();
+		        if (subOpcion.equals("0"))
+		            break;
+		        switch (subOpcion) {
+		            case "1" -> consultasCategorias();
+		            case "2" -> insertarCategoria();
+		            case "3" -> modificarCategoria();
+		            case "4" -> borrarCategoria();
+		            default -> System.out.println("Opción no válida");
+		        }
+		    }
 	}
 
 	private static void consultasCategorias() {
@@ -1288,8 +1209,6 @@ public class App {
 	
 	//=================Métodos auxiliares=================
 	
-	
-	//=================Métodos auxiliares=================
 	/**
 	 * Borra finalmente el flag (ya sea tras desvincular o si no había jokes).
 	 * @param <T>
