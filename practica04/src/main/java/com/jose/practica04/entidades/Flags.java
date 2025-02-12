@@ -85,9 +85,6 @@ public class Flags implements java.io.Serializable {
 
 	@Override
 	public String toString() {
-	    return "Flags {" +
-	            "\n  id=" + id +
-	            ",\n  flag=" + flag +
-	            "\n}";
+	    return  id + ". " + flag + " ";
 	}
 }

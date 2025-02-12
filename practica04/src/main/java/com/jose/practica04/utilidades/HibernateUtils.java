@@ -11,22 +11,39 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.query.NativeQuery;
 import org.hibernate.query.Query;
 
+/**
+ * Clase que contiene métodos para realizar operaciones con la base de datos
+ * utilizando Hibernate
+ * 
+ * @autor Jose Pinilla
+ */
 public class HibernateUtils {
 	
 	static SessionFactory sessionFactory;
 	static Session session;
 	
+	/**
+	 * Abre una conexión con la base de datos
+	 * @return True si la conexión es correcta. False si sucede algún fallo
+	 */
 	public static boolean abrirConexion() {
 		sessionFactory = new Configuration().configure().buildSessionFactory();
 		session = sessionFactory.openSession();
 		return (session != null);
 	}
 
+	/**
+	 * Cierra la conexión con la base de datos
+	 */
 	public static void cerrarConexion() {
 		session.close();
 		sessionFactory.close();
 	}
 
+	/**
+	 * Quita el log de la consola
+	 * al realizar operaciones con la base de datos
+	 */
 	public static void quitarLog() {
 		Logger.getLogger("org.hibernate").setLevel(java.util.logging.Level.OFF);
 	}
@@ -69,7 +86,11 @@ public class HibernateUtils {
 		}		
 	}
 	
-	
+	/**
+	 * Dado una lista de Objetos que le enviamos lo guarda en la base de datos
+	 * @param objects Lista de Objetos enviados
+	 * @return True si el guardado es correcto. False si sucede algún fal
+	 */
 	public static boolean persistAll(Object... objects) {
 		Transaction trans = null;
 		try {
@@ -114,6 +135,11 @@ public class HibernateUtils {
 		}
 	}
 	
+	/**
+	 * Dado un objeto que le enviamos lo elimina de la base de datos
+	 * @param object Objeto a eliminar
+	 * @return True si la eliminación es correcta. False si sucede algún fallo
+	 */
 	public static boolean remove(Object object) {
 		Transaction trans = null;
 		try {
@@ -129,14 +155,31 @@ public class HibernateUtils {
 	}
 
 
+	/**
+	 * Devuelve una lista de objetos de una clase
+	 * @param clase Clase de la que se quieren obtener los objetos
+	 * @return List<T> Lista de objetos
+	 */
 	public static <T> List<T> getAll(Class<T> clase) {
         return session.createQuery("from " + clase.getSimpleName(), clase).list();
     }
 
+	/**
+	 * Devuelve una lista de objetos de una clase que cumplan una condición
+	 * @param query Consulta que se quiere realizar
+	 * @param clase Clase de la que se quieren obtener los objetos
+	 * @return List<T> Lista de objetos
+	 */
 	public static <T> List<T> getQuery(String query, Class<T> clase) {
 		return session.createQuery(query, clase).list();
 	}
 	
+	/**
+	 * Devuelve un objeto de una clase que cumplan una condición 
+	 * @param clase Class de la que se quiere obtener el objeto
+	 * @param id Identificador del objeto
+	 * @return T Objeto obtenido
+	 */
 	public static <T> T getById(Class<T> clase, int id) {
 		return session.get(clase,id);
 	}

@@ -130,14 +130,18 @@ public class Jokes implements java.io.Serializable {
 	
 	@Override
 	public String toString() {
-	    return "Jokes {" +
-	            "\n  id=" + id +
-	            ",\n  categories=" + (categories != null ? categories.getCategory() : "null") +
-	            ",\n  language=" + (language != null ? language.getLanguage() : "null") +
-	            ",\n  types=" + (types != null ? types.getType() : "null") +
-	            ",\n  text1=" + text1 +
-	            ",\n  text2=" + text2 +
-	            ",\n  flagses=" + (flagses != null ? flagses : "[]") +
-	            "\n}";
+		 return "{" +
+		           id +
+		           ". categories=" + (categories != null ? categories.getCategory() : "null") +
+		           ", language=" + (language != null ? language.getLanguage() : "null") +
+		           ", types=" + (types != null ? types.getType() : "null") +
+		           ", text1=" + text1 +
+		           ", text2=" + text2 +
+		           "\n  flags=" + (flagses != null ? flagses : "[]") +
+		           "\n}";
+	}
+
+	public void addFlagses(Set<Flags> flags) {
+		this.flagses.addAll(flags);		
 	}
 }

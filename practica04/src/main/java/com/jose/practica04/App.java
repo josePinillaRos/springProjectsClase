@@ -14,9 +14,18 @@ import com.jose.practica04.entidades.Types;
 import com.jose.practica04.utilidades.HibernateUtils;
 import com.jose.practica04.utilidades.MenuUtils;
 
-
+/**
+ * class App
+ * clase que se encarga de toda la logica e interacción con el usuario
+ * 
+ * @autor Jose Pinilla
+ */
 public class App {
 	static Scanner sc;
+	
+	/**
+	 * Método que abre la conexión con la base de datos y muestra el menú principal
+	 */
 	public static void main( String[] args ) {
 		sc = new Scanner(System.in);
 		HibernateUtils.quitarLog();
@@ -33,6 +42,10 @@ public class App {
 		HibernateUtils.cerrarConexion();
 	}
 
+	/**
+	 * Método que muestra el menú principal y llama a los métodos de gestión de jokes,
+	 * categories, lenguajes y flags
+     */
 	public static void tratarMenu() {
 		
 		while (true) {
@@ -53,6 +66,11 @@ public class App {
 	}
 	
 	// ======================Métodos de gestión de jokes===============================
+	
+	/**
+	 * Método que muestra el menú de gestión de jokes y llama a los métodos de
+	 * consultas, inserción, modificación y borrado
+	 */
 	public static void tratarOpcionGestionJokes() {
 		
 	    while (true) {
@@ -72,6 +90,11 @@ public class App {
 	    }
 	}
 
+	/**
+	 * Método que muestra el menú de consultas de jokes y llama a los métodos de
+	 * búsqueda de todos los jokes, búsqueda de jokes por texto y búsqueda de jokes
+	 * sin flags
+	 */
 	private static void consultasJokes() {
 		
 		while (true) {
@@ -82,7 +105,7 @@ public class App {
 			if (opcion.equals("0"))
 				break;
 			switch (opcion) {
-			case "1" -> HibernateUtils.getAll(Jokes.class).forEach(System.out::println);
+			case "1" -> obtenerTodosLosJokes();
 			case "2" -> buscarJokePorTexto();
 			case "3" -> buscarJokesSinFlags();
 			default -> System.out.println("Opción no válida");
@@ -90,6 +113,25 @@ public class App {
 		}
 	}
 
+	/**
+	 * Método que busca todos los jokes en la base de datos
+	 * Los muestra por pantalla
+	 */
+	private static void obtenerTodosLosJokes() {
+		List<Jokes> jokes = HibernateUtils.getAll(Jokes.class);
+		if (jokes.isEmpty()) {
+			System.out.println("No se ha encontrado ningún chiste");
+			return;
+		}
+		for (Jokes joke : jokes) {
+			System.out.println(joke);
+		}
+		System.out.println("Total de chistes: " + jokes.size());
+	}
+
+	/**
+	 * Método que busca todos los jokes sin flags
+	 */
 	private static void buscarJokesSinFlags() {
 
 		List<Jokes> jokes = HibernateUtils.getQuery(
@@ -104,10 +146,13 @@ public class App {
 		}
 	}
 
+	/**
+	 * Método que busca un joke por un texto que introduce el usuario
+	 */
 	private static void buscarJokePorTexto() {
 		
 		System.out.print("Introduzca el texto a buscar: ");
-		String texto = sc.nextLine();
+		String texto = sc.nextLine().replaceAll("'", "''").toLowerCase();
 		List<Jokes> jokes = HibernateUtils.getQuery (
 				"FROM Jokes WHERE LOWER(text1) LIKE '%" + texto + "%' OR LOWER(text2) LIKE '%" + texto + "%'", Jokes.class
 				);
@@ -120,6 +165,9 @@ public class App {
 		}
 	}
 	
+	/**
+	 * Método que inserta un joke en la base de datos
+	 */
 	private static void insertarJoke() {
 		Categories categoriaElegida = elegirCategoria();
 		Types typeElegido = elegirType();
@@ -145,6 +193,10 @@ public class App {
 		
 	}
 
+	/**
+	 * Se le da al usuario una lista de categorias y elige una
+	 * @return la categoria elegida
+	 */
 	private static Categories elegirCategoria() {
 		 System.out.println("Categorías disponibles:");
 
@@ -178,6 +230,10 @@ public class App {
 		    return categoriaSeleccionada;
 	}
 	
+	/**
+	 * Se le da al usuario una lista de tipos y elige uno
+	 * @return el tipo elegido
+	 */
 	private static Types elegirType() {
 		System.out.println("Tipos disponibles:");
 
@@ -211,6 +267,11 @@ public class App {
 	    return tipoSeleccionado;
 	}
 
+	/**
+	 * Se recoge un texto que introduce el usuario
+	 * @param typeElegido tipo de joke
+	 * @return un array con el texto 1 y el texto 2
+	 */
 	private static String[] elegriTexto(Types typeElegido) {
 		String t1 = "";
 		String t2 = "";
@@ -229,6 +290,10 @@ public class App {
 		}
 	}
 	
+	/**
+	 * Se le da al usuario una lista de lenguajes y elige uno
+	 * @return el lenguaje elegido
+	 */
 	private static Language elegirLenguaje() {
 		System.out.println("Lenguajes disponibles:");
 
@@ -261,6 +326,10 @@ public class App {
 	    return lenguajeSeleccionado;
 	}
 	
+	/**
+	 * Se le da al usuario una lista de flags y elige uno o varios
+	 * @return los flags elegidos
+	 */
 	private static Set<Flags> elegirFlags() {
 		System.out.println("Flags disponibles:");
 
@@ -280,7 +349,7 @@ public class App {
 	            if (idSeleccionado == 0) {
 	                continuar = false; 
 	            } else {
-	                // Buscar el flag por su id
+
 	                Flags flagSeleccionado = HibernateUtils.getId(Flags.class, idSeleccionado);
 
 	                if (flagSeleccionado != null) {
@@ -303,6 +372,11 @@ public class App {
 	    return flagsSeleccionados;
 	}
 	
+	/**
+	 * Metodo sobreescrito con parametro de entrada. Elige flags de una lista de flags disponibles
+	 * @param flagsDisponibles
+	 * @return los flags elegidos
+	 */
 	private static Set<Flags> elegirFlags(Set<Flags> flagsDisponibles) {
 		System.out.println("Flags disponibles:");
 
@@ -344,6 +418,11 @@ public class App {
 	    return flagsSeleccionados;
 	}
 
+	/**
+	 * Método que modifica un joke
+	 * Se le pide al usuario que introduzca el id del joke a modificar
+	 * Se le pide al usuario los nuevos valores para modificar el joke
+	 */
 	private static void modificarJoke() {
 	    HibernateUtils.getAll(Jokes.class).forEach(System.out::println); 
 
@@ -377,6 +456,13 @@ public class App {
 	    }
 	}
 	
+	/**
+	 * Método que muestra las opciones para modificar un joke
+	 * pregunta al usuario si desea modificar la categoría, el tipo, el texto, el lenguaje y los flags
+	 * 
+	 * @param jokeAModificar
+	 * @return el joke modificado
+	 */
 	private static Jokes preguntasModificarJoke (Jokes jokeAModificar) {
 		System.out.println("Categoría actual: " + jokeAModificar.getCategories());
 		if (leerConfirmacionSN("¿Desea modificar la categoría? (S/N): ")) {
@@ -434,12 +520,22 @@ public class App {
 		return jokeAModificar;
 	}
 	
+	/**
+	 * Metodo para añadir flags a un joke modificado
+	 * @param jokeAModificar 
+	 * @return joke modificado
+	 */
 	private static Jokes introducirFlagsJokesModificados(Jokes jokeAModificar) {
 		Set<Flags> flags = elegirFlags();
-		jokeAModificar.setFlagses(flags);
+		jokeAModificar.addFlagses(flags);
 		return jokeAModificar;
 	}
 		
+	/**
+	 * Metodo para quitar flags a un joke modificado
+	 * @param jokeAModificar
+	 * @return joke modificado
+	 */
 	private static Jokes quitarFlags(Jokes jokeAModificar) {
 		Set<Flags> flagsActuales = jokeAModificar.getFlagses();
 
@@ -452,16 +548,18 @@ public class App {
 		return jokeAModificar;
 	}
 	
+	/**
+	 * Método que borra un joke Se le pide al usuario que introduzca el id del joke
+	 * a borrar Se le pide confirmación al usuario para borrar el joke
+	 */
 	private static void borrarJoke() {
-	    // Mostrar todos los jokes disponibles
 	    List<Jokes> jokes = HibernateUtils.getAll(Jokes.class);
 	    if (jokes.isEmpty()) {
 	        System.out.println("No hay jokes disponibles para borrar.");
 	        return;
 	    }
 	    jokes.forEach(System.out::println);
-
-	    // Solicitar ID del joke a borrar, validando la entrada
+	    
 	    Jokes jokeABorrar = null;
 	    while (jokeABorrar == null) {
 	        System.out.print("\nIntroduzca el id del joke a borrar: ");
@@ -470,7 +568,6 @@ public class App {
 	        try {
 	            int id = Integer.parseInt(entrada);
 
-	            // Buscar el joke por su ID
 	            jokeABorrar = HibernateUtils.getId(Jokes.class, id);
 	            if (jokeABorrar == null) {
 	                System.out.println("No existe ningún joke con ese ID. Inténtelo de nuevo.");
@@ -482,15 +579,15 @@ public class App {
 
 	    // Verificar si el joke tiene relaciones M:M con flags
 	    Set<Flags> flagsAsociados = jokeABorrar.getFlagses();
+	    
 	    if (flagsAsociados != null && !flagsAsociados.isEmpty()) {
 	        // Preguntar confirmación si hay relaciones
 	        System.out.println("El joke con ID " + jokeABorrar.getId() + 
 	                " tiene " + flagsAsociados.size() + " flag(s) asociado(s).");
 	        flagsAsociados.forEach(System.out::println);
-	        System.out.print("¿Desea realmente borrarlo? (S/N): ");
-	        String confirmacion = sc.nextLine().trim().toLowerCase();
-	        if (!confirmacion.equals("s")) {
-	            System.out.println("Operación cancelada. No se ha borrado el joke.");
+	        
+	        if (!leerConfirmacionSN("¿Desea realmente borrarlo? (S/N): ")) {
+	        	System.out.println("Operación cancelada. No se ha borrado el joke.");
 	            return;
 	        }
 	    }
@@ -505,6 +602,11 @@ public class App {
 	}
 	
 	// ===========================Métodos de gestión de categories==================================
+	
+	/**
+	 * Método que muestra el menú de gestión de categories y llama a los métodos de
+	 * consultas, inserción, modificación y borrado
+     */
 	private static void tratarOpcionGestionCategories() {
 		 while (true) {
 	    	System.out.println("\nMenú de gestión de categories");
@@ -523,9 +625,14 @@ public class App {
 	    }
 	}
 
+	/**
+	 * Método que muestra el menú de consultas de categories y llama a los métodos de
+	 * búsqueda de todas las categories, búsqueda de categories por texto y búsqueda de
+	 * la category más repetida
+	 */
 	private static void consultasCategorias() {
 		while (true) {
-			System.out.println("\nMenú de consultas de jokes");
+			System.out.println("\nMenú de consultas de categorías");
 			System.out.println("-----------------------------------------------------------------------------\n");
 			System.out.println(MenuUtils.imprimirMenu("Buscar todas las categorías","Buscar categoría por texto","Buscar categoría más repetida"));
 			String opcion = sc.nextLine();
@@ -540,6 +647,10 @@ public class App {
 		}
 	}
 
+	/**
+	 * Método que busca todas las categorías en la base de datos
+	 * Utiliza una consulta nativa
+	 */
 	private static void buscarTodasLasCategoriasNativeQuery() {
 	    List<Categories> resultados = HibernateUtils.nativeQuery(
 	            "SELECT * FROM categories", 
@@ -557,10 +668,14 @@ public class App {
 	    }
 	}
 	
+	/**
+	 * Método que busca una categoría por un texto que introduce el usuario
+	 * Utiliza una consulta nativa
+	 */
 	private static void buscarCategoriaPorTextoNativeQuery() {
 	    HashMap<String, Object> parametros = new HashMap<String, Object>();
 	    System.out.println("Introduzca el texto a buscar: ");
-	    String texto = sc.nextLine().toLowerCase();
+	    String texto = sc.nextLine().replaceAll("'", "''").toLowerCase();
 	    parametros.put("category", "%" + texto + "%"); 
 
 	    List<Categories> resultados = HibernateUtils.nativeQuery(
@@ -578,6 +693,9 @@ public class App {
 	    }  
 	}
 
+	/**
+	 * Método que busca la categoría más repetida Utiliza una consulta nativa
+	 */
 	private static void buscarCategoriaMasRepetida() {
 		 // Consulta nativa 
 	    String sql = "SELECT c.* " +
@@ -592,10 +710,10 @@ public class App {
 	        return;
 	    }
 
-	    // Encontrar la categoría más repetida utilizando distinct y count y reduce 
+	    // Encontrar la categoría más repetida utilizando distinct, count y reduce 
 	    // de los métodos de programación funcional vistos en clase.
 	    Categories categoriaMasRepetida = categorias.stream()
-	            .distinct() // Filtrar categorías únicas
+	            .distinct() 
 	            .reduce((c1, c2) -> // Reducir a la categoría más repetida
 	                    categorias.stream().filter(c -> c.equals(c1)).count() > 
 	                    categorias.stream().filter(c -> c.equals(c2)).count() ? c1 : c2)
@@ -615,6 +733,9 @@ public class App {
 	            " - Cantidad: " + cantidad);
 	}
 
+	/**
+	 * Método que inserta una categoría en la base de datos
+     */
 	private static void insertarCategoria() {
 		System.out.print("Introduzca el nombre de la categoría: ");
 		String nombre = sc.nextLine();
@@ -627,6 +748,11 @@ public class App {
 		}
 	}
 
+	/**
+	 * Método que modifica una categoría
+	 * Se le pide al usuario que introduzca el id de la categoría a modificar
+	 * Se le pide al usuario el nuevo nombre para modificar la categoría
+	 */
 	private static void modificarCategoria() {
 		HibernateUtils.getAll(Categories.class).forEach(System.out::println);
 
@@ -655,9 +781,12 @@ public class App {
 			System.out.print("Introduzca el nuevo nombre de la categoría: ");
 			String nuevoNombre = sc.nextLine();
 			categoriaAModificar.setCategory(nuevoNombre);
+		} else {
+            System.out.println("Nombre actual: " + categoriaAModificar.getCategory());
+            System.out.println("No se ha modificado el nombre");
+            return;
 		}
-
-
+            	
 		boolean resultado = HibernateUtils.merge(categoriaAModificar) != null;
 		if (resultado) {
 			System.out.println("Categoría actualizada correctamente: " + categoriaAModificar);
@@ -666,6 +795,11 @@ public class App {
 		}
 	}
 	
+	/**
+	 * Método que borra una categoría Se le pide al usuario que introduzca el id de
+	 * la categoría a borrar Se le pide confirmación al usuario para borrar la
+	 * categoría
+	 */
 	private static void borrarCategoria() {
 		List<Categories> categorias = HibernateUtils.getAll(Categories.class);
 		String nativeQuery = 
@@ -673,25 +807,31 @@ public class App {
 	        "FROM jokes j " +
 	        "WHERE j.category_id = :id";
 		
-	    // 1. Escoger la categoría a eliminar
+	    // Escoger la categoría a eliminar
 	    Categories catABorrar = escogerElemento(categorias, Categories.class);
 	    if (catABorrar == null) {
-	        return; // el usuario no encontró categoría o lista vacía
+	        return; 
 	    }
 
-	    // 2. Obtener los jokes asociados por Native Query
+	    //Comprobar si hay jokes asociados
 	    List<Jokes> jokesAsociados = getJokesAsociadosAlElemento(catABorrar.getId(), nativeQuery);
 
-	    // 3. Si hay jokes asociados, gestionarlos
+	    //Si hay jokes asociados, gestionarlos
 	    if (!jokesAsociados.isEmpty()) {
 	        gestionarJokesAsociadosCategoria(catABorrar, jokesAsociados);
 	        return; // aquí ya se hizo todo (posible desvinculación + borrado)
 	    }
 
-	    // 4. No había jokes => borrar la categoría directamente
+	    //Si no habia jokes asociados, borrar la categoría directamente
 	    borrarElementoFinal(catABorrar, catABorrar.getId(), "categoria");
 	}
 
+	/**
+	 * Método que gestiona los jokes asociados a una categoría
+	 * Pregunta al usuario si desea desvincular los jokes de la categoría o borrarlos
+	 * @param catABorrar Categoría a borrar
+	 * @param jokesAsociados Lista de jokes asociados a la categoría
+	 */
 	private static void gestionarJokesAsociadosCategoria(Categories catABorrar, List<Jokes> jokesAsociados) {
 	    System.out.println("\nLa categoría con ID " + catABorrar.getId() +
 	            " está asociada a " + jokesAsociados.size() + " joke(s).");
@@ -711,7 +851,7 @@ public class App {
 
 	        switch (opcion) {
 	            case "1":
-	                // 1. Desvincular la categoría de cada Joke
+	                // Desvincular la categoría de cada Joke
 	                for (Jokes joke : jokesAsociados) {
 	                    Jokes jokeManaged = HibernateUtils.getId(Jokes.class, joke.getId());
 	                    if (jokeManaged != null) {
@@ -722,25 +862,25 @@ public class App {
 	                }
 	                System.out.println("Se ha desvinculado la categoría de " + jokesAsociados.size() + " chistes.");
 
-	                // 2. Preguntar confirmación para borrar la categoría
-	                boolean deseaBorrarCat = leerConfirmacionSN("¿Desea ahora borrar la categoría (S/N)?: ");
-	                if (!deseaBorrarCat) {
+	                // Preguntar confirmación para borrar la categoría
+	                if (!leerConfirmacionSN("¿Desea ahora borrar la categoría (S/N)?: ")) {
 	                    System.out.println("Operación cancelada. No se ha borrado la categoría.");
 	                    return;
 	                }
-	                // 3. Borrar la categoría
+	                //Si el usuario confirma, se borra la categoría
 	                borrarElementoFinal(catABorrar, catABorrar.getId(), "categoria");
 	                return;
 
 	            case "2":
 	                // Borrar los jokes asociados
 	                System.out.println("Va a borrar " + jokesAsociados.size() + " chiste(s) asociado(s) a la categoría.");
-	                boolean confirmado = leerConfirmacionSN("¿Está seguro? (S/N): ");
-	                if (!confirmado) {
+	              
+	                if (!leerConfirmacionSN("¿Está seguro? (S/N): ")) {
 	                    System.out.println("Operación cancelada. No se ha borrado la categoría.");
 	                    return;
 	                }
-
+	                
+	                //Si el usuario confirma, se borran los jokes asociados
 	                for (Jokes joke : jokesAsociados) {
 	                    boolean resultado = HibernateUtils.remove(joke);
 	                    if (resultado) {
@@ -752,12 +892,12 @@ public class App {
 	                System.out.println("Se han borrado " + jokesAsociados.size() + " chiste(s) asociado(s) a la categoría.");
 
 	                // Confirmamos si se borra la categoría
-	                boolean borrarCatAhora = leerConfirmacionSN("¿Desea ahora borrar la categoría (S/N)?: ");
-	                if (!borrarCatAhora) {
+	                if (!leerConfirmacionSN("¿Desea ahora borrar la categoría (S/N)?: ")) {
 	                    System.out.println("Operación cancelada. No se ha borrado la categoría.");
 	                    return;
 	                }
-
+	                
+	                //Si el usuario confirma, se borra la categoría
 	                borrarElementoFinal(catABorrar, catABorrar.getId(), "categoria");
 	                return;
 
@@ -769,9 +909,12 @@ public class App {
 	}
 
 	
-	// ====================Métodos de gestión de lenguajes=============================
-	
 	// ===========================Métodos de gestión de Language==================================
+	
+	/**
+	 * Método que muestra el menú de gestión de lenguajes y llama a los métodos de
+	 * consultas, inserción, modificación y borrado
+     */
 	private static void tratarOpcionGestionLenguajes() {
 		while (true) {
         	System.out.println("\nMenú de gestión de lenguajes");
@@ -790,6 +933,11 @@ public class App {
         }
 	}
 
+	/**
+	 * Método que muestra el menú de consultas de lenguajes y llama a los métodos de
+	 * búsqueda de todos los lenguajes, búsqueda de lenguajes por texto y búsqueda de
+	 * lenguajes sin jokes
+	 */
 	private static void consultasLenguajes() {
 		while (true) {
             System.out.println("\nMenú de consultas de lenguajes");
@@ -807,12 +955,15 @@ public class App {
         }
 	}
 	
+	/**
+	 * Método que busca todos los lenguajes en la base de datos
+	 * Utiliza una Named Query
+	 */
 	private static void buscarTodosLosLenguajes() {
-	    // Llamada a la Named Query para obtener todos los lenguajes
 	    List<Language> resultados = HibernateUtils.namedQuery(
 	            "Language.todos",
 	            Language.class,
-	            null // No necesita parámetros
+	            null
 	    );
 
 	    if (resultados.isEmpty()) {
@@ -825,16 +976,18 @@ public class App {
 	    }
 	}
 
+	/**
+	 * Método que busca un lenguaje por un texto que introduce el usuario
+	 */
 	private static void buscarLenguajePorTexto() {
-	    // Pedir texto a buscar al usuario
 	    System.out.println("Introduzca el texto a buscar: ");
-	    String texto = sc.nextLine().toLowerCase();
+	    String texto = sc.nextLine().replaceAll("'", "''").toLowerCase();
 
 	    // Crear el mapa de parámetros para la Named Query
 	    HashMap<String, Object> parametros = new HashMap<>();
 	    parametros.put("searchText", "%" + texto + "%");
 
-	    // Llamada a la Named Query para buscar por texto en el campo 'language'
+	    // Llamada a la Named Query
 	    List<Language> resultados = HibernateUtils.namedQuery(
 	            "Language.buscarPorTexto",
 	            Language.class,
@@ -851,12 +1004,16 @@ public class App {
 	    }
 	}
 
+	/**
+	 * Método que busca lenguajes sin jokes asociados
+	 * Utiliza una Named Query
+	 */
 	private static void buscarLenguajeSinJokes() {
-	    // Llamada a la Named Query para buscar lenguajes sin chistes asociados
+	    // Llamada a la Named Query
 	    List<Language> resultados = HibernateUtils.namedQuery(
 	            "Language.lenguajesSinJokes",
 	            Language.class,
-	            null // No necesita parámetros
+	            null 
 	    );
 
 	    if (resultados.isEmpty()) {
@@ -868,14 +1025,28 @@ public class App {
 	    }
     }
 
+	/**
+	 * Método que inserta un lenguaje en la base de datos
+	 * Se le pide al usuario que introduzca el código y el nombre del lenguaje
+	 */
 	private static void insertarLenguaje() {
-		System.out.println("Introduzca el código del lenguaje: ");
-        String code = sc.nextLine();
+		String code;
+		
+        do {
+            System.out.println("Introduzca el código del lenguaje (2 letras): ");
+            code = sc.nextLine().toLowerCase();
+            if (!code.matches("[a-z]{2}")) {
+                System.out.println("El código tiene que tener 2 letras.");
+            }
+        } while (!code.matches("[a-z]{2}"));
+			
         System.out.print("Introduzca el nombre del lenguaje: ");
         String language = sc.nextLine();
+        
         Language nuevoLenguaje = new Language();
         nuevoLenguaje.setCode(code);
         nuevoLenguaje.setLanguage(language);
+        
         if (HibernateUtils.persistAll(nuevoLenguaje)) {
             System.out.println("Lenguaje guardado correctamente.");
         } else {
@@ -883,6 +1054,11 @@ public class App {
         }
 	}
 
+	/**
+	 * Método que modifica un lenguaje
+	 * Se le pide al usuario que introduzca el id del lenguaje a modificar
+	 * Se le pide al usuario los nuevos valores para modificar el lenguaje
+	 */
 	private static void modificarLenguaje() {
 		HibernateUtils.getAll(Language.class).forEach(System.out::println);
 
@@ -908,8 +1084,16 @@ public class App {
 
 		System.out.println("Codigo actual: " + lenguajeAModificar.getCode());
 		if (leerConfirmacionSN("¿Desea modificar el código? (S/N): ")) {
-			System.out.print("Introduzca el nuevo código del lenguaje: ");
-			String nuevoCode = sc.nextLine();
+			String nuevoCode;
+			
+	        do {
+	            System.out.println("Introduzca el nuevo código del lenguaje (2 letras): ");
+	            nuevoCode = sc.nextLine().toLowerCase();
+	            if (!nuevoCode.matches("[a-z]{2}")) {
+	                System.out.println("El código tiene que tener 2 letras.");
+	            }
+	        } while (!nuevoCode.matches("[a-z]{2}"));
+			
 			lenguajeAModificar.setCode(nuevoCode);
 		} 
 
@@ -928,8 +1112,20 @@ public class App {
 		}
 	}
 
+	/**
+	 * Método que borra un lenguaje
+	 * Se le pide al usuario que introduzca el id del lenguaje a borrar
+	 * Se comprueba si el lenguaje tiene jokes asociados
+	 * Si tiene jokes asociados, se pregunta al usuario si desea desvincularlos o borrarlos
+	 */
 	private static void borrarLenguaje() {
 		List<Language> lenguajes = HibernateUtils.getAll(Language.class);
+		
+		if (lenguajes.isEmpty()) {
+			System.out.println("No hay lenguajes disponibles para borrar.");
+			return;
+		}
+		
 		String nativeQuery =
 			"SELECT j.* " +
 			"FROM jokes j " +
@@ -940,21 +1136,23 @@ public class App {
 	        return; 
 	    }
 
+	    //Comprobar si hay jokes asociados
 	    List<Jokes> jokesAsociados = getJokesAsociadosAlElemento(langABorrar.getId(), nativeQuery);
 
-	    // 3. Si hay jokes asociados, gestionarlos
+	    //Si hay jokes asociados, gestionarlos
 	    if (!jokesAsociados.isEmpty()) {
 	        gestionarJokesAsociadosLanguage(langABorrar, jokesAsociados);
 	        return;
 	    }
 
+	    //Si no hay jokes asociados, borrar el lenguaje directamente
 	    borrarElementoFinal(langABorrar, langABorrar.getId(), "Language");
 	}
 
 	/**
 	 * Muestra un menú para el usuario, permitiéndole:
-	 *  - Desvincular los chistes (poner language a null) y luego borrar el language
-	 *  - Borrar los chistes y luego borrar el language
+	 *  Desvincular los chistes (poner language a null) y luego borrar el language
+	 *  Borrar los chistes y luego borrar el language
 	 */
 	private static void gestionarJokesAsociadosLanguage(Language langABorrar, List<Jokes> jokesAsociados) {
 	    System.out.println("\nEl language con ID " + langABorrar.getId() +
@@ -1016,8 +1214,7 @@ public class App {
 	                System.out.println("Se han borrado " + jokesAsociados.size() + " chiste(s) asociado(s) al language.");
 
 	                // Confirmar si se borra el language
-	                boolean borrarLangAhora = leerConfirmacionSN("¿Desea ahora borrar el language (S/N)?: ");
-	                if (!borrarLangAhora) {
+	                if (!leerConfirmacionSN("¿Desea ahora borrar el language (S/N)?: ")) {
 	                    System.out.println("Operación cancelada. No se ha borrado el language.");
 	                    return;
 	                }
@@ -1033,9 +1230,13 @@ public class App {
 	    }
 	}
 	
-	// ===================Métodos de gestión de flags============================
 	
 	// ===========================Métodos de gestión de Flags==================================
+	
+	/**
+	 * Método que muestra el menú de gestión de flags y llama a los métodos de
+	 * consultas, inserción, modificación y borrado
+	 */
 	private static void tratarOpcionGestionFlags() {
 		while (true) {
 			System.out.println("\nMenú de gestión de flags");
@@ -1054,6 +1255,11 @@ public class App {
 		}
 	}
 
+	/**
+	 * Método que muestra el menú de consultas de flags y llama a los métodos de
+	 * búsqueda de todos los flags, búsqueda de flags por texto y búsqueda del
+	 * flag más repetido
+	 */
 	private static void consultasFlags() {
 		while (true) {
 			System.out.println("\nMenú de consultas de flags");
@@ -1072,41 +1278,60 @@ public class App {
 		}	
 	}
 	
-	private static void mostrarTodosFlags() {
+	/**
+	 * Método que muestra todos los flags en la base de datos
+	 */
+	private static boolean mostrarTodosFlags() {
 		List<Flags> flags = obtenerTodosFlags();
 		if (flags.isEmpty()) {
 			System.out.println("No hay flags disponibles.");
-			return;
+			return false;
 		} else {
 			flags.forEach(System.out::println);
+			return true;
 		}
 	}
 	
+	/**
+	 * Método que obtiene todos los flags de
+	 * la base de datos
+	 * @return Lista de flags
+	 */
 	private static List<Flags> obtenerTodosFlags() {
 		return HibernateUtils.getAll(Flags.class);
 	}
 
+	/**
+	 * Metodo que busca un flag por un texto que introduce el usuario
+	 */
 	private static void buscarFlagPorTexto() {
 		System.out.print("Introduzca el texto a buscar: ");
-		String texto = sc.nextLine().toLowerCase();
+		String texto = sc.nextLine().replaceAll("'", "''").toLowerCase();
+		
 		List<Flags> flags = HibernateUtils.getQuery("FROM Flags WHERE LOWER(flag) LIKE '%" + texto + "%'", Flags.class);
+		
 		if (flags.isEmpty()) {
 			System.out.println("No se ha encontrado ningún flag con ese texto");
 			return;
 		}
+		
 		for (Flags flag : flags) {
 			System.out.println(flag);
 		}
 	}
 
+	/**
+	 * Método que busca el flag más repetido
+	 */
 	private static void buscarFlagMasRepetido() {
-		// Consulta nativa 
+		
         String sql = "SELECT f.* " +
                      "FROM flags f " +
                      "JOIN jokes_flags jf ON f.id = jf.flag_id";
 
-        // Ejecutar la consulta nativa y mapear los resultados a la clase Flags
         List<Flags> flags = HibernateUtils.nativeQuery(sql, Flags.class, null);
+        
+        flags.forEach(System.out::println);
 
         if (flags == null || flags.isEmpty()) {
             System.out.println("No se ha encontrado ningún flag asociado a jokes.");
@@ -1116,8 +1341,8 @@ public class App {
         // Encontrar el flag más repetido utilizando distinct y count y reduce 
         // de los métodos de programación funcional vistos en clase.
         Flags flagMasRepetido = flags.stream()
-                .distinct() // Filtrar flags únicos
-                .reduce((f1, f2) -> // Reducir al flag más repetido
+                .distinct() 
+                .reduce((f1, f2) ->
                         flags.stream().filter(f -> f.equals(f1)).count() > 
                         flags.stream().filter(f -> f.equals(f2)).count() ? f1 : f2)
                 .orElse(null);
@@ -1136,11 +1361,16 @@ public class App {
                 " - Cantidad: " + cantidad);
 	}
 
+	/**
+	 * Método que inserta un flag en la base de datos
+	 */
 	private static void insertarFlag() {
 		System.out.print("Introduzca el nombre del flag: ");
         String nombre = sc.nextLine();
+        
         Flags nuevoFlag = new Flags();
         nuevoFlag.setFlag(nombre);
+        
         if (HibernateUtils.persistAll(nuevoFlag)) {
             System.out.println("Flag guardado correctamente.");
         } else {
@@ -1148,8 +1378,14 @@ public class App {
         }
 	}
 
+	/**
+	 * Método que modifica un flag
+	 */
 	private static void modificarFlag() {
-		mostrarTodosFlags();
+		if(!mostrarTodosFlags()) {
+			System.out.println("No hay flags disponibles.");
+			return;
+		}
 
 		Flags flagAModificar = null;
 
@@ -1186,6 +1422,9 @@ public class App {
 		}
 	}
 
+	/**
+	 * Método que borra un flag
+	 */
 	private static void borrarFlag() {
 		List<Flags> flags = obtenerTodosFlags();
 		String nativeQuery = 
@@ -1201,18 +1440,20 @@ public class App {
 	
 	    List<Jokes> jokesAsociados = getJokesAsociadosAlElemento(flagABorrar.getId(), nativeQuery);
 
+	    //Si hay jokes asociados, gestionarlos
 	    if (!jokesAsociados.isEmpty()) {
 	        gestionarJokesAsociados(flagABorrar, jokesAsociados);
 	        return; 
 	    }
 	
+	    //Si no hay jokes asociados, borrar el flag directamente
 	    borrarElementoFinal(flagABorrar, flagABorrar.getId(), "flag");
 	}
 	
 	/**
 	 * Muestra un menú para el usuario, permitiéndole:
-	 *  - Desvincular los chistes (y a continuación borrar el flag)
-	 *  - Borrar los chistes y luego poder seguir el flujo
+	 *  Desvincular los chistes (y a continuación borrar el flag)
+	 *  Borrar los chistes y luego poder seguir el flujo
 	 */
 	private static void gestionarJokesAsociados(Flags flagABorrar, List<Jokes> jokesAsociados) {
 		System.out.println("\nEl flag con ID " + flagABorrar.getId() +
@@ -1242,20 +1483,20 @@ public class App {
 	                }
 	                System.out.println("Se ha desvinculado el flag de " + jokesAsociados.size() + " chistes.");
 
-	                boolean deseaBorrarFlag = leerConfirmacionSN("¿Desea ahora borrar el flag (S/N)?: ");
-	                if (!deseaBorrarFlag) {
+	                if (!leerConfirmacionSN("¿Desea ahora borrar el flag (S/N)?: ")) {
 	                    System.out.println("Operación cancelada. No se ha borrado el flag.");
 	                    return;
 	                }
 
+	                // Borrar el flag
 	                borrarElementoFinal(flagABorrar, flagABorrar.getId(), "flag");
 	                return;
 
 	            case "2":
 	                // Borrar los jokes asociados
 	                System.out.println("Va a borrar " + jokesAsociados.size() + " chiste(s) asociado(s) al flag.");
-	                boolean confirmado = leerConfirmacionSN("¿Está seguro? (S/N): ");
-	                if (!confirmado) {
+	                
+	                if (!leerConfirmacionSN("¿Está seguro? (S/N): ")) {
 	                    System.out.println("Operación cancelada. No se ha borrado el flag.");
 	                    return;
 	                }
@@ -1270,12 +1511,12 @@ public class App {
 	                }
 	                System.out.println("Se han borrado " + jokesAsociados.size() + " chiste(s) asociado(s) al flag.");
 
-	                boolean borrarFlagAhora = leerConfirmacionSN("¿Desea ahora borrar el flag (S/N)?: ");
-	                if (!borrarFlagAhora) {
+	                if (!leerConfirmacionSN("¿Desea ahora borrar el flag (S/N)?: ")) {
 	                    System.out.println("Operación cancelada. No se ha borrado el flag.");
 	                    return;
 	                }
 	                
+	                // Si el usuario confirma, se borra el flag
 	                borrarElementoFinal(flagABorrar, flagABorrar.getId(), "flag");
 	                return;
 
@@ -1288,11 +1529,11 @@ public class App {
 	
 	//=================Métodos auxiliares=================
 	
-	
-	//=================Métodos auxiliares=================
 	/**
-	 * Borra finalmente el flag (ya sea tras desvincular o si no había jokes).
-	 * @param <T>
+	 * Borra finalmente el elemento (ya sea tras desvincular o si no había jokes).
+	 * @param elementoABorrar Elemento a borrar.
+	 * @param idElemento ID del elemento a borrar.
+	 * @param nombreElemento Nombre del elemento
 	 */
 	private static <T> void borrarElementoFinal(T elementoABorrar, long idElemento, String nombreElemento) {
 		 boolean confirmado = leerConfirmacionSN(
@@ -1333,6 +1574,12 @@ public class App {
 	    }
 	}
 
+	/**
+	 * Método que permite al usuario escoger un elemento de una lista
+	 * @param lista Lista de elementos
+	 * @param clase Clase del elemento
+	 * @return Elemento escogido
+	 */
 	private static <T> T escogerElemento(List<T> lista, Class<T> clase) {
 	    // Si la lista está vacía, no hay nada que escoger
 	    if (lista.isEmpty()) {
@@ -1349,7 +1596,7 @@ public class App {
 	        String entrada = sc.nextLine();
 	        try {
 	            int id = Integer.parseInt(entrada);
-	            // Cargar la entidad con HibernateUtils.getId(...)
+
 	            entidadEscogida = HibernateUtils.getId(clase, id);
 	            if (entidadEscogida == null) {
 	                System.out.println("No existe ningún elemento con ese ID. Inténtelo de nuevo.");
@@ -1362,9 +1609,10 @@ public class App {
 	}
 
 	/**
-	 * Obtiene la lista de Jokes asociados al flag proporcionado mediante una Native Query.
-	 * @param flagABorrar El flag del que se desea obtener los Jokes asociados.
-	 * @return Lista de Jokes asociados al flag
+	 * Obtiene la lista de Jokes asociados al elemento proporcionado mediante una Native Query.
+	 * @param idElementoABorrar ID del elemento a borrar
+	 * @param nativeQuery Consulta nativa para obtener los Jokes asociados
+	 * @return Lista de Jokes asociados al elemento
 	 */
 	private static List<Jokes> getJokesAsociadosAlElemento(long idElementoABorrar, String nativeQuery) {
 	    HashMap<String, Object> params = new HashMap<>();

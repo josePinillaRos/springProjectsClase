@@ -1,0 +1,27 @@
+<div class="cliente-form-container">
+  <h1>{{ isEditMode ? 'Editar Cliente' : 'Nuevo Cliente' }}</h1>
+  <form [formGroup]="clienteForm" (ngSubmit)="guardarCliente()">
+    <mat-form-field appearance="fill">
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="nombre" />
+      <mat-error *ngIf="clienteForm.get('nombre')?.invalid">El nombre es obligatorio (4-12 caracteres).</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Apellido</mat-label>
+      <input matInput formControlName="apellido" />
+      <mat-error *ngIf="clienteForm.get('apellido')?.invalid">El apellido es obligatorio.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" />
+      <mat-error *ngIf="clienteForm.get('email')?.invalid">Debe ser un email válido.</mat-error>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit" [disabled]="clienteForm.invalid">
+      {{ isEditMode ? 'Actualizar' : 'Crear' }}
+    </button>
+    <button mat-button color="warn" routerLink="/clientes">Cancelar</button>
+  </form>
+</div>
